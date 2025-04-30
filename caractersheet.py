@@ -2,6 +2,29 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QHBo
 import items
 import random
 
+class sceduler:
+    tasks = []
+
+    def __init__(self):
+        pass
+
+    def scedule(self, dt, func):
+        self.tasks.append([dt,func])
+
+    def scedule_during(self, ts, te, func):
+        for dt in range(ts, te):
+            self.scedule(dt,func)
+
+    def execute(self):
+        done = []
+        for i in range(len(self.tasks)):
+            self.tasks[i][0] -= 1
+            if(self.tasks[i][0]<0):
+                self.tasks[i][1]()
+                done.append(i)
+        for i in done:
+            self.tasks.pop(i)
+
 class tracker:
     hp=100
     spd=10
@@ -16,6 +39,7 @@ class tracker:
 
     def __init__(self, labels):
         self.l = labels
+        self.s = sceduler()
         self.update()
 
     def update(self):
@@ -94,6 +118,9 @@ class CharacterSheetWindow(QMainWindow):
         overlayer.addLayout(add_layout)
 
         button_layout = QHBoxLayout()
+        turn_button = QPushButton("End of Turn")
+        turn_button.clicked.connect(self.t.s.execute)
+        button_layout.addWidget(turn_button)
         roll_button = QPushButton("Roll")
         roll_button.clicked.connect(self.roll)
         button_layout.addWidget(roll_button)
@@ -125,7 +152,8 @@ class CharacterSheetWindow(QMainWindow):
                 file.write(f"{self.t.sldbuff}\n")
             with open("items.txt", "w") as file:
                 for item in self.t.itemlist:
-                    file.write(f"{item.name}\n")
+                    if item.active:
+                        file.write(f"{item.name}\n")
             msg_box = QMessageBox()
             msg_box.setWindowTitle("Save Successful")
             msg_box.setText("Character stats have been saved successfully.")

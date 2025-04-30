@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QMessageBox, QInputDialog
 import random
 
 smod = 2
@@ -660,6 +660,7 @@ class spe_artefact(Shield):
 class Potion(Item):
     dur = 0
     name = "Unknown Potion"
+    used = False
     def __init__(self, tracker):
         super().__init__(tracker)
         fin_button = QPushButton("FINALIZE")
@@ -670,199 +671,471 @@ class Potion(Item):
         self.name += " (used)"
         self.t.update()
     def finalize(self):
-        self.remove()
-        self.t.update()
+        if(self.active):
+            if(self.used):
+                err_box = QMessageBox()
+                err_box.setWindowTitle("Not yet used")
+                err_box.setText(f"You have to use the potion before finalizing it.")
+                err_box.exec()
+                return False
+            self.remove()
+            self.t.update()
+            True
+    def use(self):
+        if(self.used):
+            err_box = QMessageBox()
+            err_box.setWindowTitle("Allready used")
+            err_box.setText(f"You allready used this potion.")
+            err_box.exec()
+            return False
+        return True
+        super().use()
     def labelcont(self):
-        return f"{self.name}: Duration: {self.dur}"
+        return f"{self.name}: Duration: {self.dur} rnd"
     
 class s_health_potion(Potion):
     name = "Small Health Potion"
-    dur = "3 rnd"
+    dur = 2
     def use(self):
-        self.t.hp+=5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp+=5
     def finalize(self):
-        self.t.hp-=5
-        super().finalize()
+        if super().finalize():
+            pass
 
 class m_health_potion(Potion):
     name = "Medium Health Potion"
-    dur = "6 rnd"
+    dur = 6
     def use(self):
-        self.t.hp+=15
-        self.t.spd-=2.5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp+=15
+            self.t.spd-=2.5
     def finalize(self):
-        self.t.hp-=15
-        self.t.spd+=2.5
-        super().finalize()
+        if super().finalize():
+            self.t.spd+=1.5
 
 class l_health_potion(Potion):
     name = "Large Health Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp+=30
-        self.t.spd-=5
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp+=30
+            self.t.spd-=5
+            self.t.man-=4
     def finalize(self):
-        self.t.hp-=30
-        self.t.spd+=5
-        super().finalize()
+        if super().finalize():
+            self.t.hp-=10
+            self.t.spd+=5
 
 class s_speed_potion(Potion):
     name = "Small Speed Potion"
-    dur = "3 rnd"
+    dur = 3
     def use(self):
-        self.t.spd+=1
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.spd+=1
     def finalize(self):
-        self.t.spd-=1
-        super().finalize()
+        if super().finalize():
+            self.t.spd-=1
 
 class m_speed_potion(Potion):
     name = "Medium Speed Potion"
-    dur = "6 rnd"
+    dur = 6
     def use(self):
-        self.t.hp-=15
-        self.t.spd+=2.5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=15
+            self.t.spd+=2.5
     def finalize(self):
-        self.t.hp+=10
-        self.t.spd-=2.5
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=10
+            self.t.spd-=2.5
 
 class l_speed_potion(Potion):
     name = "Large Speed Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp-=30
-        self.t.spd+=5
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=30
+            self.t.spd+=5
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=30
-        self.t.spd-=5
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=30
+            self.t.spd-=5
 
 class s_str_potion(Potion):
     name = "Small Strength Potion"
-    dur = "3 rnd"
+    dur = 3
     def use(self):
-        self.t.str+=5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.str+=5
     def finalize(self):
-        self.t.str-=5
-        super().finalize()
+        if super().finalize():
+            self.t.str-=5
 
 class l_str_potion(Potion):
     name = "Large Strength Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp-=10
-        self.t.str+=15
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.str+=15
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=10
-        self.t.str-=15
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=10
+            self.t.str-=15
 
 class s_dex_potion(Potion):
     name = "Small Dexterity Potion"
-    dur = "3 rnd"
+    dur = 3
     def use(self):
-        self.t.dex+=5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.dex+=5
     def finalize(self):
-        self.t.dex-=5
-        super().finalize()
+        if super().finalize():
+            self.t.dex-=5
 
 class l_dex_potion(Potion):
     name = "Large Dexterity Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp-=10
-        self.t.dex+=15
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.dex+=15
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=10
-        self.t.dex-=15
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=10
+            self.t.dex-=15
 
 class s_man_potion(Potion):
     name = "Small Mana Potion"
     sets = {"MAN": 5}
-    dur = "3 rnd"
+    dur = 3
     def use(self):
-        self.t.man+=5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.man+=5
     def finalize(self):
-        self.t.man-=5
-        super().finalize()
+        if super().finalize():
+            self.t.man-=5
 
 class l_man_potion(Potion):
     name = "Large Mana Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp-=10
-        self.t.str-=4
-        self.t.dex-=4
-        self.t.man+=15
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.str-=4
+            self.t.dex-=4
+            self.t.man+=15
     def finalize(self):
-        self.t.hp+=10
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=10
 
 class s_soc_potion(Potion):
     name = "Small Social Potion"
-    dur = "3 rnd"
+    dur = 3
     def use(self):
-        self.t.soc+=5
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.soc+=5
     def finalize(self):
-        self.t.soc-=5
-        super().finalize()
+        if super().finalize():
+            self.t.soc-=5
 
 class l_soc_potion(Potion):
     name = "Large Social Potion"
-    dur = "9 rnd"
+    dur = 9
     def use(self):
-        self.t.hp-=10
-        self.t.soc+=15
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.soc+=15
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=10
-        self.t.soc-=15
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=10
+            self.t.soc-=15
 
 class dmgbuff_potion(Potion):
-    name = "Damage Buff Potion"
-    dur = "2 rnd"
+    name = "Attack Buff Potion"
+    dur = 2
     def use(self):
-        self.t.hp-=10
-        self.t.dmgbuff+=25
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.dmgbuff+=25
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=5
-        self.t.dmgbuff-=25
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=5
+            self.t.dmgbuff-=25
 
 class sldbuff_potion(Potion):
     name = "Defense Buff Potion"
-    dur = "2 rnd"
+    dur = 2
     def use(self):
-        self.t.hp-=10
-        self.t.sldbuff+=25
-        self.t.man-=4
-        super().use()
+        if super().use():
+            self.used=True
+            self.t.s.scedule(self.dur, self.finalize)
+            self.t.hp-=10
+            self.t.sldbuff+=25
+            self.t.man-=4
     def finalize(self):
-        self.t.hp+=5
-        self.t.sldbuff-=25
-        super().finalize()
+        if super().finalize():
+            self.t.hp+=5
+            self.t.sldbuff-=25
+
+class Status:
+    name = "Unknown Status"
+    rounds = 1
+    def __init__(self,tracker):
+        self.active = True
+        self.t=tracker
+        self.layout = QVBoxLayout()
+        self.label = QLabel()
+        self.layout.addWidget(self.label)
+        self.buttons = QHBoxLayout()
+        remove_button = QPushButton("REMOVE")
+        remove_button.clicked.connect(self.remove)
+        self.buttons.addWidget(remove_button)
+        self.layout.addLayout(self.buttons)
+        self.t.inventory.addLayout(self.layout)
+    def update(self):
+        self.label.setText(self.labelcont())
+    def remove(self):
+        for i in reversed(range(self.buttons.count())): 
+            try:
+                self.buttons.itemAt(i).widget().setParent(None)
+            except:
+                pass
+        for i in reversed(range(self.layout.count())): 
+            try:
+                self.layout.itemAt(i).widget().setParent(None)
+            except:
+                pass
+        self.active = False
+    def tick(self):
+        self.rounds -= 1
+        if(self.rounds <= 0):
+            self.remove()
+            return False
+        if(not self.active):
+            return False
+        self.update()
+        return True
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds"
+
+def InputWindow (par_name, default):
+    parameter, ok = QInputDialog.getInt(None, "Input Required", f"Enter a value for {par_name}:")
+    if not ok:
+        parameter = default
+    return parameter
+
+class stuck(Status):
+    name = "Stuck"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Slowdown Factor", 1)
+        self.t.spd /= self.val
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.spd *= self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Slowdown Factor: {self.val}"
+    
+class total_stuck(Status):
+    name = "Totally Stuck"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = self.t.spd
+        self.t.spd = 0
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.spd = self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Slowdown Factor: {self.val}"
+    
+class weak(Status):
+    name = "Weak"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Weakness Factor", 1)
+        self.t.str /= self.val
+        self.t.dex /= self.val
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.str *= self.val
+        self.t.dex *= self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Weakness Factor: {self.val}"
+    
+class mana_drain(Status):
+    name = "Mana-drain"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Weakness Factor", 1)
+        self.t.man /= self.val
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.man *= self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Drain Factor: {self.val}"
+    
+class bleeding(Status):
+    name = "Bleeding"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Damage", 0)
+        self.update()
+        self.t.update()
+    def tick(self):
+        if super().tick():
+            self.t.hp -= self.val
+            self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Damage: {self.val}"
+    
+class attack_drain(Status):
+    name = "Attack Buff"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Buff", 0)
+        self.t.dmgbuff += self.val
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.dmgbuff -= self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Buff: {self.val}"
+    
+class attack_drain(Status):
+    name = "Defense Buff"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule(self.rounds,self.undo)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.val = InputWindow("Buff", 0)
+        self.t.sldbuff += self.val
+        self.update()
+        self.t.update()
+    def undo(self):
+        self.t.sldbuff -= self.val
+        self.t.update()
+    def labelcont(self):
+        return f"{self.name}: Duration: {self.rounds} rds, Buff: {self.val}"
+    
+class CustomStatus(Status):
+    name = "New Status"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.name, ok = QInputDialog.getText(None, "Creating Status", f"Enter a name for the new status:")
+        if not ok and self.name!="":
+            self.remove()
+            return
+        self.update()
+        self.rounds = InputWindow("Duration", 1)
+        self.t.s.scedule_during(0,self.rounds,self.tick)
+        self.update()
+        self.t.update()
+    
+class CustomItem:
+    name = "New Item"
+    desc = ""
+    def __init__(self,tracker):
+        self.active = True
+        self.t=tracker
+        self.layout = QVBoxLayout()
+        self.label = QLabel()
+        self.layout.addWidget(self.label)
+        self.buttons = QHBoxLayout()
+        remove_button = QPushButton("REMOVE")
+        remove_button.clicked.connect(self.remove)
+        self.buttons.addWidget(remove_button)
+        self.layout.addLayout(self.buttons)
+        self.t.inventory.addLayout(self.layout)
+
+        self.name, ok = QInputDialog.getText(None, "Creating Item", f"Enter a name for the new item:")
+        if not ok and self.name!="":
+            self.remove()
+            return
+        self.update()
+        d, ok = QInputDialog.getText(None, "Creating Item", f"Enter a description for the new item:")
+        if ok and d!="":
+            self.desc = "\n"+d
+        self.update()
+    def update(self):
+        self.label.setText(self.labelcont())
+    def remove(self):
+        for i in reversed(range(self.buttons.count())): 
+            try:
+                self.buttons.itemAt(i).widget().setParent(None)
+            except:
+                pass
+        for i in reversed(range(self.layout.count())): 
+            try:
+                self.layout.itemAt(i).widget().setParent(None)
+            except:
+                pass
+        self.active = False
+    def labelcont(self):
+        return f"{self.name}{self.desc}"
 
 def get_classes_dict():
     classes_dict = {}
@@ -870,3 +1143,7 @@ def get_classes_dict():
         if isinstance(cls, type) and hasattr(cls, 'name'):
             classes_dict[cls.name] = cls
     return classes_dict
+
+if __name__ == "__main__":
+    for i in get_classes_dict():
+        print(i)
