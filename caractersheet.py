@@ -26,7 +26,7 @@ class sceduler:
             self.tasks.pop(i)
 
 class tracker:
-    hp=100
+    hp=1000
     spd=10
     str=25
     dex=25
