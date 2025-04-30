@@ -223,19 +223,6 @@ class CustomStatus(Status):
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.update()
         self.t.update()
-        with open("./custom.py", "r") as f:
-            index = int(f.readlines()[-1][1:])
-        with open("./custom.py", "a") as f:
-            f.write(f'''
-class CustomStatus{index}(Status):
-    name = "{self.name}"
-    rounds = {self.rounds}
-    def __init__(self, tracker):
-        super().__init__(tracker)
-        self.t.s.scedule_during(0,self.rounds,self.tick)
-        self.update()
-        self.t.update()
-#{index+1}''')
     
 class CustomItem:
     name = "New Item"
@@ -268,8 +255,8 @@ class CustomItem:
                 f.write(f'''
 class CustomItem{index}(CustomItem):
     name = "{self.name}"
-    desc = "{repr(self.desc)}"
-#{index+1}''')
+    desc = {repr(self.desc)}
+\n#{index+1}''')
         self.update()
         
     def update(self):
