@@ -282,4 +282,4 @@ try:
         index = int(f.readlines()[-1][1:])
 except:
     with open("./custom.py", "w") as f:
-        f.write("from items import CustomItem, Status\n#0")
+        f.write("from items import CustomItem, Status\n\n#0")
