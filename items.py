@@ -153,6 +153,15 @@ class Potion(Item):
                 return False
             self.remove()
             return True
+    def tick(self):
+        self.dur -= 1
+        if(self.dur <= 0):
+            self.finalize()
+            return False
+        if(not self.active):
+            return False
+        self.update()
+        return True
     def use(self):
         if(self.used):
             err_box = QMessageBox()
@@ -161,7 +170,7 @@ class Potion(Item):
             err_box.exec()
             return False
         self.used = True
-        self.t.s.scedule(self.dur, self.finalize)
+        self.t.s.scedule_during(0, self.dur, self.tick)
         self.name = f"{self.name} (used)"
         return True
     def labelcont(self):
