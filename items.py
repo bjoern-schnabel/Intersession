@@ -217,7 +217,7 @@ class CustomStatus(Status):
             self.remove()
             return
         self.update()
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.update()
         self.t.update()

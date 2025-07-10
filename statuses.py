@@ -4,7 +4,7 @@ class stuck(Status):
     name = "Stuck"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Slowdown Factor", 1)
@@ -21,7 +21,7 @@ class total_stuck(Status):
     name = "Totally Stuck"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = self.t.spd
@@ -38,7 +38,7 @@ class weak(Status):
     name = "Weak"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Weakness Factor", 1)
@@ -57,7 +57,7 @@ class mana_drain(Status):
     name = "Mana-drain"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Weakness Factor", 1)
@@ -74,7 +74,7 @@ class bleeding(Status):
     name = "Bleeding"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Damage", 0)
@@ -91,7 +91,7 @@ class attack_drain(Status):
     name = "Attack Buff"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Buff", 0)
@@ -108,7 +108,7 @@ class attack_drain(Status):
     name = "Defense Buff"
     def __init__(self, tracker):
         super().__init__(tracker)
-        self.rounds = InputWindow("Duration", 1)
+        self.rounds = int(InputWindow("Duration", 1))
         self.t.s.scedule(self.rounds,self.undo)
         self.t.s.scedule_during(0,self.rounds,self.tick)
         self.val = InputWindow("Buff", 0)
