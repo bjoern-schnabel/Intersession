@@ -9,7 +9,7 @@ def get_classes_dict():
     classes_dict = {}
     for cls in globals().values():
         if isinstance(cls, type) and hasattr(cls, 'name'):
-            classes_dict[cls.name] = cls
+            classes_dict[cls.name.lower()] = cls
     return classes_dict
 
 if __name__ == "__main__":

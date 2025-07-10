@@ -72,6 +72,24 @@ class sim_bow(Weapon):
         self.mod = int((self.t.dex*2 + self.t.str)/3)
         super().update()
 
+class mid_dagger(Weapon):
+    base_dmg = 15
+    base_range = 4
+    bonus = 3
+    uses = "2*DEX, 1*STR"
+    name = "Dagger"
+    def __init__(self, tracker):
+        super().__init__(tracker)
+        self.update()
+    def superc(self):
+        self.superd = True
+        self.t.dex -= (random.randint(1,7)+random.randint(1,7))/4
+        self.t.str -= 1
+        self.t.update()
+    def update(self):
+        self.mod = int(self.t.dex + 0.5+self.t.str)
+        super().update()
+
 class mid_katana(Weapon):
     base_dmg = 18
     base_range = 5

@@ -5,7 +5,7 @@ smod = 2
 sstd = 40
 
 def InputWindow (par_name, default):
-    parameter, ok = QInputDialog.getInt(None, "Input Required", f"Enter a value for {par_name}:")
+    parameter, ok = QInputDialog.getDouble(None, "Input Required", f"Enter a value for {par_name}:")
     if not ok:
         parameter = default
     return parameter
@@ -143,20 +143,16 @@ class Potion(Item):
         fin_button.clicked.connect(self.finalize)
         self.buttons.addWidget(fin_button)
         self.update()
-    def use(self):
-        self.name += " (used)"
-        self.t.update()
     def finalize(self):
         if(self.active):
-            if(self.used):
+            if(not self.used):
                 err_box = QMessageBox()
                 err_box.setWindowTitle("Not yet used")
                 err_box.setText(f"You have to use the potion before finalizing it.")
                 err_box.exec()
                 return False
             self.remove()
-            self.t.update()
-            True
+            return True
     def use(self):
         if(self.used):
             err_box = QMessageBox()
@@ -164,8 +160,10 @@ class Potion(Item):
             err_box.setText(f"You allready used this potion.")
             err_box.exec()
             return False
+        self.used = True
+        self.t.s.scedule(self.dur, self.finalize)
+        self.name = f"{self.name} (used)"
         return True
-        super().use()
     def labelcont(self):
         return f"{self.name}: Duration: {self.dur} rnd"
 

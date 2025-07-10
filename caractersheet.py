@@ -141,7 +141,7 @@ class CharacterSheetWindow(QMainWindow):
     
     def save(self):
         try:
-            with open("stats.txt", "w") as file:
+            with open("stats.txt", "w", encoding='utf-8') as file:
                 file.write(f"{self.t.hp}\n")
                 file.write(f"{self.t.spd}\n")
                 file.write(f"{self.t.str}\n")
@@ -150,7 +150,7 @@ class CharacterSheetWindow(QMainWindow):
                 file.write(f"{self.t.soc}\n")
                 file.write(f"{self.t.dmgbuff}\n")
                 file.write(f"{self.t.sldbuff}\n")
-            with open("items.txt", "w") as file:
+            with open("items.txt", "w", encoding='utf-8') as file:
                 for item in self.t.itemlist:
                     if item.active:
                         file.write(f"{item.name}\n")
@@ -166,7 +166,7 @@ class CharacterSheetWindow(QMainWindow):
 
     def load(self):
         try:
-            with open("stats.txt", "r") as file:
+            with open("stats.txt", "r", encoding='utf-8') as file:
                 stats = file.readlines()
                 self.t.hp = float(stats[0].strip())
                 self.t.spd = float(stats[1].strip())
@@ -177,12 +177,12 @@ class CharacterSheetWindow(QMainWindow):
                 self.t.dmgbuff = float(stats[6].strip())
                 self.t.sldbuff = float(stats[7].strip())
                 self.t.update()
-            with open("items.txt", "r") as file:
+            with open("items.txt", "r", encoding='utf-8') as file:
                 for item in self.t.itemlist:
                     item.remove()
                 self.t.itemlist = []
                 for line in file:
-                    item_name = line.strip()
+                    item_name = line.strip().lower()
                     try:
                         self.t.itemlist.append(items.get_classes_dict()[item_name](self.t))
                     except KeyError:
@@ -202,7 +202,7 @@ class CharacterSheetWindow(QMainWindow):
 
     def add_item(self):
         try:
-            self.t.itemlist.append(items.get_classes_dict()[self.add_item_text.text()](self.t))
+            self.t.itemlist.append(items.get_classes_dict()[self.add_item_text.text().lower()](self.t))
         except KeyError:
             msg_box = QMessageBox()
             msg_box.setWindowTitle("Item not found.")
