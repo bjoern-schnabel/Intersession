@@ -6,9 +6,7 @@ class s_health_potion(Potion):
     dur = 2
     def use(self):
         if super().use():
-
-
-            self.t.hp+=5
+            self.t.hp+=50
         self.t.update()
     def finalize(self):
         if super().finalize():
@@ -20,9 +18,7 @@ class m_health_potion(Potion):
     dur = 6
     def use(self):
         if super().use():
-
-
-            self.t.hp+=15
+            self.t.hp+=150
             self.t.spd-=2.5
         self.t.update()
     def finalize(self):
@@ -35,15 +31,13 @@ class l_health_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp+=30
+            self.t.hp+=300
             self.t.spd-=5
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.spd+=5
         self.t.update()
 
@@ -52,8 +46,6 @@ class s_speed_potion(Potion):
     dur = 3
     def use(self):
         if super().use():
-
-
             self.t.spd+=1
         self.t.update()
     def finalize(self):
@@ -66,14 +58,12 @@ class m_speed_potion(Potion):
     dur = 6
     def use(self):
         if super().use():
-
-
-            self.t.hp-=15
+            self.t.hp-=150
             self.t.spd+=2.5
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=10
+            self.t.hp+=100
             self.t.spd-=2.5
         self.t.update()
 
@@ -82,15 +72,13 @@ class l_speed_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp-=30
+            self.t.hp-=300
             self.t.spd+=5
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=30
+            self.t.hp+=300
             self.t.spd-=5
         self.t.update()
 
@@ -99,8 +87,6 @@ class s_str_potion(Potion):
     dur = 3
     def use(self):
         if super().use():
-
-
             self.t.str+=5
         self.t.update()
     def finalize(self):
@@ -113,15 +99,13 @@ class l_str_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.str+=15
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=10
+            self.t.hp+=100
             self.t.str-=15
         self.t.update()
 
@@ -130,8 +114,6 @@ class s_dex_potion(Potion):
     dur = 3
     def use(self):
         if super().use():
-
-
             self.t.dex+=5
         self.t.update()
     def finalize(self):
@@ -144,15 +126,13 @@ class l_dex_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.dex+=15
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=10
+            self.t.hp+=100
             self.t.dex-=15
         self.t.update()
 
@@ -162,8 +142,6 @@ class s_man_potion(Potion):
     dur = 3
     def use(self):
         if super().use():
-
-
             self.t.man+=5
         self.t.update()
     def finalize(self):
@@ -176,16 +154,14 @@ class l_man_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.str-=4
             self.t.dex-=4
             self.t.man+=15
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=10
+            self.t.hp+=100
         self.t.update()
 
 class s_soc_potion(Potion):
@@ -193,8 +169,6 @@ class s_soc_potion(Potion):
     dur = 3
     def use(self):
         if super().use():
-
-
             self.t.soc+=5
         self.t.update()
     def finalize(self):
@@ -207,15 +181,13 @@ class l_soc_potion(Potion):
     dur = 9
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.soc+=15
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=10
+            self.t.hp+=100
             self.t.soc-=15
         self.t.update()
 
@@ -224,15 +196,13 @@ class dmgbuff_potion(Potion):
     dur = 2
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.dmgbuff+=25
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=5
+            self.t.hp+=50
             self.t.dmgbuff-=25
         self.t.update()
 
@@ -241,14 +211,12 @@ class sldbuff_potion(Potion):
     dur = 2
     def use(self):
         if super().use():
-
-
-            self.t.hp-=10
+            self.t.hp-=100
             self.t.sldbuff+=25
             self.t.man-=4
         self.t.update()
     def finalize(self):
         if super().finalize():
-            self.t.hp+=5
+            self.t.hp+=50
             self.t.sldbuff-=25
         self.t.update()

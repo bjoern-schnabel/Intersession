@@ -17,7 +17,7 @@ class sceduler:
 
     def execute(self):
         done = []
-        for i in range(len(self.tasks)):
+        for i in range(len(self.tasks)-1):
             self.tasks[i][0] -= 1
             if(self.tasks[i][0]<0):
                 self.tasks[i][1]()
@@ -216,7 +216,7 @@ class CharacterSheetWindow(QMainWindow):
         layout = QVBoxLayout()
 
         def roll_stat(stat_name):
-            stat = getattr(self.t, stat_name.lower())
+            stat = int(getattr(self.t, stat_name.lower()))
             result = (random.randint(0, stat)+random.randint(0, stat))
             msg_box = QMessageBox()
             msg_box.setWindowTitle(f"{stat_name} Roll")
